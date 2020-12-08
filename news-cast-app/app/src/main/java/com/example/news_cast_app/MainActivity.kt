@@ -1,5 +1,6 @@
 package com.example.news_cast_app
 
+import android.graphics.PointF.length
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -19,18 +20,26 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
+
+    var articlePreviews = ArrayList<ArticlePreview>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val textView=findViewById<TextView>(R.id.JSONDisplay)
-        val articles: JSONArray
+
+
+
 
         val queue= Volley.newRequestQueue(this)
         val url= "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources=google-news-fr"
         val jsonObjectRequest = object: JsonObjectRequest(Request.Method.GET, url, null,
             {response ->
-                textView.text="Response: %s".format(response.toString())
+                //textView.text="Response: %s".format(response.toString())
+                val articlesJSON=response.getJSONArray("articles")
+                formatJSONToArticles(articlesJSON)
+                textView.text="Response: %s".format(articlePreviews[5].author)
 
 
             },
@@ -52,4 +61,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun formatJSONToArticles(responseArray: JSONArray) {
+        for (i in 0 until responseArray.length()){
+            val JSONarticle = responseArray.getJSONObject(i)
+            val articlePrev= ArticlePreview( JSONarticle.get("author").toString(),JSONarticle.get("title").toString(), JSONarticle.get("publishedAt").toString())
+            articlePreviews.add(articlePrev)
+        }
+    }
 }
