@@ -1,44 +1,55 @@
 package com.example.news_cast_app
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import org.json.JSONArray
 import java.io.BufferedInputStream
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
 
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        val textView=findViewById<TextView>(R.id.JSONDisplay)
+        val articles: JSONArray
+
+        val queue= Volley.newRequestQueue(this)
+        val url= "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources=google-news-fr"
+        val jsonObjectRequest = object: JsonObjectRequest(Request.Method.GET, url, null,
+            {response ->
+                textView.text="Response: %s".format(response.toString())
+
+
+            },
+            { error ->
+                textView.text="erreur"
+                Log.d("error", error.message.toString())
+            }
+        )
+
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["User-Agent"] = "Mozilla/5.0"
+                return headers
+            }
         }
 
+        queue.add(jsonObjectRequest)
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 }
