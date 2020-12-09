@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -18,12 +19,14 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
         val txtAuthor: TextView
         val txtTitle: TextView
         val txtDate: TextView
+        val button: Button
 
         init {
             v.setOnClickListener{ Log.d(TAG ,"Element $adapterPosition clicked")}
             txtAuthor=v.findViewById(R.id.txtAuthor)
             txtTitle=v.findViewById(R.id.txtTitle)
             txtDate=v.findViewById(R.id.txtDate)
+            button=v.findViewById(R.id.button)
         }
 
     }
@@ -38,6 +41,9 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
         holder.txtAuthor.text=dataset[position].author
         holder.txtTitle.text=dataset[position].title
         holder.txtDate.text=dataset[position].date
+        holder.button.setOnClickListener{
+            Log.d(TAG, "Element has been clicked"+position)
+        }
 
     }
 

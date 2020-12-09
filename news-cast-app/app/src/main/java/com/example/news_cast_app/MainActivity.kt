@@ -1,43 +1,73 @@
 package com.example.news_cast_app
 
-import android.graphics.PointF.length
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.SpinnerAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import org.json.JSONArray
-import java.io.BufferedInputStream
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
 
 class MainActivity : AppCompatActivity() {
 
     var articlePreviews = ArrayList<ArticlePreview>()
+    var sources=ArrayList<Source>()
+    lateinit var mySpinner: Spinner
+    lateinit var spinArrayAdapter: SpinnerAdapter
+
+    var sources_dropdown = ArrayList<String>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
-
-
-
-
         val queue= Volley.newRequestQueue(this)
-        val url= "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources=google-news-fr"
-        val jsonObjectRequest = object: JsonObjectRequest(Request.Method.GET, url, null,
+
+        mySpinner=findViewById(R.id.mySpinner)
+
+        spinArrayAdapter=ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item, sources_dropdown)
+        mySpinner.setAdapter(spinArrayAdapter)
+
+        val urlSources= "https://newsapi.org/v2/sources?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr"
+
+        val jsonObjectRequestSources=object: JsonObjectRequest(Request.Method.GET, urlSources, null,
+            {response ->
+
+
+                val sourcesJSON=response.getJSONArray("sources")
+                Log.d("hey", response.getJSONArray("sources").toString())
+                formatJSONToSources(sourcesJSON)
+
+            },
+            { error ->
+
+                Log.d("error", error.message.toString())
+            }
+        )
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["User-Agent"] = "Mozilla/5.0"
+                return headers
+            }
+        }
+        queue.add(jsonObjectRequestSources)
+
+
+
+
+
+
+        val urlArticles= "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources=google-news-fr"
+        val jsonObjectRequestArticles = object: JsonObjectRequest(Request.Method.GET, urlArticles, null,
             {response ->
                 //textView.text="Response: %s".format(response.toString())
                 val articlesJSON=response.getJSONArray("articles")
@@ -75,12 +105,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        queue.add(jsonObjectRequest)
+        queue.add(jsonObjectRequestArticles)
 
 
 
     }
 
+    fun formatJSONToSources(responseArray: JSONArray){
+        for (i in 0 until responseArray.length()){
+            val JSONsource = responseArray.getJSONObject(i)
+            Log.d("hey", JSONsource.toString())
+            val source= Source( JSONsource.get("id").toString(),JSONsource.get("name").toString())
+            sources.add(source)
+            sources_dropdown.add(JSONsource.get("name").toString())
+        }
+    }
     fun formatJSONToArticles(responseArray: JSONArray) {
         for (i in 0 until responseArray.length()){
             val JSONarticle = responseArray.getJSONObject(i)
@@ -88,4 +127,6 @@ class MainActivity : AppCompatActivity() {
             articlePreviews.add(articlePrev)
         }
     }
+
+
 }
