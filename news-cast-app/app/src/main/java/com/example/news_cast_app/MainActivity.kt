@@ -7,6 +7,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -27,7 +29,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val textView=findViewById<TextView>(R.id.JSONDisplay)
+
+
 
 
 
@@ -39,12 +42,27 @@ class MainActivity : AppCompatActivity() {
                 //textView.text="Response: %s".format(response.toString())
                 val articlesJSON=response.getJSONArray("articles")
                 formatJSONToArticles(articlesJSON)
-                textView.text="Response: %s".format(articlePreviews[5].author)
+                //textView.text="Response: %s".format(articlePreviews[5].author)
+                var viewManager = LinearLayoutManager(this)
+                var viewAdapter=CustomAdapter(articlePreviews)
+
+                var recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view).apply {
+                    // use this setting to improve performance if you know that changes
+                    // in content do not change the layout size of the RecyclerView
+                    setHasFixedSize(true)
+
+                    // use a linear layout manager
+                    layoutManager = viewManager
+
+                    // specify an viewAdapter (see also next example)
+                    adapter = viewAdapter
+
+                }
 
 
             },
             { error ->
-                textView.text="erreur"
+
                 Log.d("error", error.message.toString())
             }
         )
@@ -58,6 +76,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         queue.add(jsonObjectRequest)
+
+
 
     }
 
