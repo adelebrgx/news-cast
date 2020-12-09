@@ -1,12 +1,11 @@
 package com.example.news_cast_app
 
-import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.SpinnerAdapter
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +13,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +28,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val alert = AlertDialog.Builder(this).create()
+        alert.setMessage("The articles are charging ... \n Please wait!")
+        alert.show()
 
         val queue= Volley.newRequestQueue(this)
 
@@ -45,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                 val sourcesJSON=response.getJSONArray("sources")
                 Log.d("hey", response.getJSONArray("sources").toString())
                 formatJSONToSources(sourcesJSON)
+                alert.dismiss()
 
             },
             { error ->
