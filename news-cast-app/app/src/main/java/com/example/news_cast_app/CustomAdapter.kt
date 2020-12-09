@@ -1,5 +1,7 @@
 package com.example.news_cast_app
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,12 +23,16 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
         val txtDate: TextView
         val button: Button
 
+
         init {
-            v.setOnClickListener{ Log.d(TAG ,"Element $adapterPosition clicked")}
+
             txtAuthor=v.findViewById(R.id.txtAuthor)
             txtTitle=v.findViewById(R.id.txtTitle)
             txtDate=v.findViewById(R.id.txtDate)
             button=v.findViewById(R.id.button)
+
+
+
         }
 
     }
@@ -37,13 +43,21 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val context: Context = holder.itemView.getContext()
         Log.d(TAG, "Element $position set")
         holder.txtAuthor.text=dataset[position].author
         holder.txtTitle.text=dataset[position].title
         holder.txtDate.text=dataset[position].date
         holder.button.setOnClickListener{
-            Log.d(TAG, "Element has been clicked"+position)
+            val article= ArticlePreview(dataset[position].author, dataset[position].title, dataset[position].date)
+
+            val intent = Intent(context, ArticleView::class.java)
+            intent.putExtra("author",article.author)
+            intent.putExtra("title",article.title)
+            intent.putExtra("date",article.date)
+            context.startActivity(intent)
         }
+
 
     }
 
