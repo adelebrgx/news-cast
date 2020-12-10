@@ -12,35 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="20dp">
+        android:paddingBottom="40dp">
 
         <TextView
             android:id="@+id/txtAuthor"
             android:layout_width="323dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:fontFamily="sans-serif-smallcaps"
             android:paddingLeft="15dp"
             android:text="Author"
             android:textColor="#0C1440"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/imageMin"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_marginEnd="350dp"
-            android:layout_marginRight="350dp"
-            android:maxHeight="50dp"
-            tools:srcCompat="@tools:sample/avatars" />
-
         <TextView
             android:id="@+id/txtTitle"
             android:layout_width="323dp"
             android:layout_height="54dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:fontFamily="casual"
             android:paddingLeft="15dp"
             android:text="Title"
@@ -52,23 +43,32 @@
             android:id="@+id/txtDate"
             android:layout_width="178dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:fontFamily="casual"
             android:paddingLeft="15dp"
             android:text="Date"
             android:textColor="#373636"
             android:textStyle="italic" />
 
+        <ImageView
+            android:id="@+id/imageMin"
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
         <Button
             android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="80dp"
+            android:layout_width="325dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
             android:fontFamily="sans-serif-smallcaps"
-            android:insetLeft="160dp"
+            android:insetLeft="200dp"
             android:insetTop="0dp"
+            android:insetRight="20dp"
             android:insetBottom="0dp"
             android:text="See more"
             android:textSize="10sp"

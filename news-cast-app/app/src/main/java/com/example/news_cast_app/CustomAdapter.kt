@@ -50,10 +50,22 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
         val context: Context = holder.itemView.getContext()
         Log.d(TAG, "Element $position set")
         holder.txtAuthor.text=dataset[position].author
-        Picasso.get().load("https://cdn3.iconfinder.com/data/icons/design-n-code/100/272127c4-8d19-4bd3-bd22-2b75ce94ccb4-512.png").into(holder.image)
 
-        if(position%2 ==1){Log.d("debug", position.toString())
-                holder.image.visibility=View.INVISIBLE
+        val urlstatic="https://cdn3.iconfinder.com/data/icons/design-n-code/100/272127c4-8d19-4bd3-bd22-2b75ce94ccb4-512.png"
+        Picasso.get().load(urlstatic).into(holder.image)
+
+        if (dataset[position].image=="null"){
+            Log.d("hey", "je suis passé ici")
+
+        }
+        else {
+            Log.d("hey", "je suis passé là")
+            val urlImage=dataset[position].image
+            Picasso.get().load(urlImage).into(holder.image)
+        }
+        holder.image.visibility=View.INVISIBLE
+        if(position%2 ==0){Log.d("debug", position.toString())
+                holder.image.visibility=View.VISIBLE
            }
         holder.txtTitle.text=dataset[position].title
         holder.txtDate.text=dataset[position].date
