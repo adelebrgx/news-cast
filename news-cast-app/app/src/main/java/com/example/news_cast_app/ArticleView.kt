@@ -2,6 +2,7 @@ package com.example.news_cast_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -30,7 +31,19 @@ class ArticleView : AppCompatActivity() {
         val textDate: TextView = findViewById(R.id.date_view) as TextView
         textDate.text=intent.getStringExtra("date")
 
+        val textDescription: TextView = findViewById(R.id.description_view) as TextView
+        textDescription.text=intent.getStringExtra("description")
 
+        val url=intent.getStringExtra("url")
+
+
+        val buttonSee=findViewById(R.id.buttonRead) as Button
+        buttonSee.setOnClickListener{
+
+            val intent = Intent(this, WebviewArticle::class.java)
+            intent.putExtra("url",url.toString())
+            startActivity(intent)
+        }
 
     }
 }

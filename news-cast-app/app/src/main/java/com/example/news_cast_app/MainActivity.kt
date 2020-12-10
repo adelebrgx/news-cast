@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
     fun formatJSONToArticles(responseArray: JSONArray) {
         for (i in 0 until responseArray.length()){
             val JSONarticle = responseArray.getJSONObject(i)
-            val articlePrev= ArticlePreview( JSONarticle.get("author").toString(),JSONarticle.get("title").toString(), JSONarticle.get("publishedAt").toString())
+            val articlePrev= ArticlePreview( JSONarticle.get("author").toString(),JSONarticle.get("title").toString(), JSONarticle.get("publishedAt").toString(), JSONarticle.get("url").toString(), JSONarticle.get("urlToImage").toString(), JSONarticle.get("description").toString())
             articlePreviews.add(articlePrev)
         }
     }
