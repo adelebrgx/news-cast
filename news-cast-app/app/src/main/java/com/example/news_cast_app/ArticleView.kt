@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import com.squareup.picasso.Picasso
 
 class ArticleView : AppCompatActivity() {
 
@@ -35,6 +37,27 @@ class ArticleView : AppCompatActivity() {
         textDescription.text=intent.getStringExtra("description")
 
         val url=intent.getStringExtra("url")
+        val myImageView= findViewById<ImageView>(R.id.image)
+        val urlstatic="https://cdn3.iconfinder.com/data/icons/design-n-code/100/272127c4-8d19-4bd3-bd22-2b75ce94ccb4-512.png"
+
+        Picasso.get().load(urlstatic).into(myImageView)
+
+
+
+        if (intent.getStringExtra("image")=="null"){
+            Log.d("hey", "je suis passé ici")
+
+        }
+        else {
+            Log.d("hey", "je suis passé là")
+            val urlImage=intent.getStringExtra("image").toString()
+            Picasso.get().load(urlImage).into(myImageView)
+        }
+
+
+
+
+
 
 
         val buttonSee=findViewById(R.id.buttonRead) as Button

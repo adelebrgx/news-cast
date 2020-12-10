@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -17,16 +18,29 @@
             android:id="@+id/txtAuthor"
             android:layout_width="323dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginLeft="80dp"
             android:fontFamily="sans-serif-smallcaps"
             android:paddingLeft="15dp"
             android:text="Author"
             android:textColor="#0C1440"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/imageMin"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginEnd="350dp"
+            android:layout_marginRight="350dp"
+            android:maxHeight="50dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
         <TextView
             android:id="@+id/txtTitle"
             android:layout_width="323dp"
             android:layout_height="54dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginLeft="80dp"
             android:fontFamily="casual"
             android:paddingLeft="15dp"
             android:text="Title"
@@ -38,6 +52,8 @@
             android:id="@+id/txtDate"
             android:layout_width="178dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginLeft="80dp"
             android:fontFamily="casual"
             android:paddingLeft="15dp"
             android:text="Date"
@@ -48,10 +64,10 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginLeft="80dp"
             android:fontFamily="sans-serif-smallcaps"
-            android:insetLeft="240dp"
+            android:insetLeft="160dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="See more"

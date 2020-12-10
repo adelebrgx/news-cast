@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
 
@@ -22,6 +25,7 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
         val txtTitle: TextView
         val txtDate: TextView
         val button: Button
+        val image: ImageView
 
 
         init {
@@ -30,7 +34,7 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
             txtTitle=v.findViewById(R.id.txtTitle)
             txtDate=v.findViewById(R.id.txtDate)
             button=v.findViewById(R.id.button)
-
+            image=v.findViewById(R.id.imageMin)
 
 
         }
@@ -46,6 +50,11 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
         val context: Context = holder.itemView.getContext()
         Log.d(TAG, "Element $position set")
         holder.txtAuthor.text=dataset[position].author
+        Picasso.get().load("https://cdn3.iconfinder.com/data/icons/design-n-code/100/272127c4-8d19-4bd3-bd22-2b75ce94ccb4-512.png").into(holder.image)
+
+        if(position%2 ==1){Log.d("debug", position.toString())
+                holder.image.visibility=View.INVISIBLE
+           }
         holder.txtTitle.text=dataset[position].title
         holder.txtDate.text=dataset[position].date
         holder.button.setOnClickListener{
