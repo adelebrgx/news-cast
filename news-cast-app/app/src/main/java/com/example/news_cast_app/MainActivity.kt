@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity() {
             },
             { error ->
 
+
+                alert.setMessage("There's been an errror ... \n Please try again!")
                 Log.d("error", error.message.toString())
             }
         )
@@ -96,7 +98,6 @@ class MainActivity : AppCompatActivity() {
 
             },
             { error ->
-
                 Log.d("error", error.message.toString())
             }
         )

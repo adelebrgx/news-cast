@@ -55,11 +55,11 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
         Picasso.get().load(urlstatic).into(holder.image)
 
         if (dataset[position].image=="null"){
-            Log.d("hey", "je suis passé ici")
+            Log.d("debug", "pas d'image")
 
         }
         else {
-            Log.d("hey", "je suis passé là")
+
             val urlImage=dataset[position].image
             Picasso.get().load(urlImage).into(holder.image)
         }
