@@ -1,11 +1,13 @@
 package com.example.news_cast_app
 
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.SpinnerAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -53,8 +55,24 @@ class MainActivity : AppCompatActivity() {
             },
             { error ->
 
+                alert.dismiss()
+                val dialogBuilder = AlertDialog.Builder(this)
 
-                alert.setMessage("There's been an errror ... \n Please try again!")
+                dialogBuilder.setMessage("Data couldn't be fetched. Do you want to refresh ?")
+                        .setCancelable(false)
+                        .setPositiveButton("Retry", DialogInterface.OnClickListener {
+                            dialog, id -> run {
+                            Log.d("debug","retry")
+                            this.recreate();
+                        }
+                        })
+                        .setNegativeButton("Cancel", DialogInterface.OnClickListener {
+                            dialog, id -> dialog.cancel()
+                        })
+
+                val alertError = dialogBuilder.create()
+                alertError.setTitle("An error has occurred")
+                alertError.show()
                 Log.d("error", error.message.toString())
             }
         )
