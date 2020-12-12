@@ -1,5 +1,5 @@
 # NewsCast
-This project was designed during Full-Stack development course. It is was developped as an end of term assignement for an Android Mobile Development Course. 
+This project was designed during a Full-Stack development course. It is was developped as an end of term assignment for an Android Mobile Development Course. 
 
 ## Functionnalities
 This application fetches news from the news api https://newsapi.org/ . By opening the app you fetch the last articles available on the platform. You can choose from which source you get the news displayed.
