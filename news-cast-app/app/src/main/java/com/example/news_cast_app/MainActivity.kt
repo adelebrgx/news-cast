@@ -2,12 +2,14 @@ package com.example.news_cast_app
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.SpinnerAdapter
-import android.widget.Toast
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,23 +25,24 @@ class MainActivity : AppCompatActivity() {
     var sources=ArrayList<Source>()
     lateinit var mySpinner: Spinner
     lateinit var spinArrayAdapter: SpinnerAdapter
+  
 
-    var sources_dropdown = ArrayList<String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val context = this
+
         val alert = AlertDialog.Builder(this).create()
         alert.setMessage("The articles are charging ... \n Please wait!")
         alert.show()
 
+        val textView= findViewById<TextView>(R.id.txtTitle)
         val queue= Volley.newRequestQueue(this)
 
-        mySpinner=findViewById(R.id.mySpinner)
+        val spinner=findViewById(R.id.mySpinner) as Spinner
 
-        spinArrayAdapter=ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item, sources_dropdown)
-        mySpinner.setAdapter(spinArrayAdapter)
 
         val urlSources= "https://newsapi.org/v2/sources?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr"
 
@@ -49,7 +52,60 @@ class MainActivity : AppCompatActivity() {
 
                 val sourcesJSON=response.getJSONArray("sources")
                 Log.d("hey", response.getJSONArray("sources").toString())
-                formatJSONToSources(sourcesJSON)
+                var list = formatJSONToSources(sourcesJSON)
+                val spinadapter:ArrayAdapter<String> = object: ArrayAdapter<String>(
+                        context,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        listOf("",
+                                sources[0].name,
+                                sources[1].name,
+                                sources[2].name,
+                                sources[3].name,
+                                sources[4].name
+                        )
+                ){
+                    override fun getDropDownView(
+                            position: Int,
+                            convertView: View?,
+                            parent: ViewGroup
+                    ): View {
+                        val view:TextView = super.getDropDownView(
+                                position,
+                                convertView,
+                                parent
+                        ) as TextView
+                        // set item text bold
+                        view.setTypeface(view.typeface, Typeface.BOLD)
+
+                        // set selected item style
+                        if (position == spinner.selectedItemPosition){
+                            view.background = ColorDrawable(Color.parseColor("#FAEBD7"))
+                            view.setTextColor(Color.parseColor("#008000"))
+                        }
+                        return view
+                    }
+                }
+                spinner.adapter = spinadapter
+                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                            parent: AdapterView<*>,
+                            view: View,
+                            position: Int,
+                            id: Long
+                    ) {
+                        Log.d("url", "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+sources[position].id)
+                        intent.putExtra("url","https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+sources[position].id )
+                        Log.d("url","chosen")
+                        if (position!=0){
+                            finish()
+                            startActivity(intent)
+                        }
+
+
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
+                }
                 alert.dismiss()
 
             },
@@ -87,10 +143,18 @@ class MainActivity : AppCompatActivity() {
 
 
 
+        var urlArticles="https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources=google-news-fr"
+        Log.d("url", getIntent().getStringExtra("url").toString())
+        if(getIntent().getStringExtra("url").toString()=="null"){
+            Log.d("url", "activité principale")
+        }
+        else{
+            Log.d("url", "dropdown source choisie")
+            urlArticles=getIntent().getStringExtra("url").toString()
+        }
 
 
 
-        val urlArticles= "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources=google-news-fr"
         val jsonObjectRequestArticles = object: JsonObjectRequest(Request.Method.GET, urlArticles, null,
             {response ->
                 //textView.text="Response: %s".format(response.toString())
@@ -132,6 +196,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
     }
 
     fun formatJSONToSources(responseArray: JSONArray){
@@ -140,9 +206,8 @@ class MainActivity : AppCompatActivity() {
             Log.d("hey", JSONsource.toString())
             val source= Source( JSONsource.get("id").toString(),JSONsource.get("name").toString())
             sources.add(source)
-            sources_dropdown.add(JSONsource.get("name").toString())
         }
-    }
+        }
     fun formatJSONToArticles(responseArray: JSONArray) {
         for (i in 0 until responseArray.length()){
             val JSONarticle = responseArray.getJSONObject(i)
@@ -150,6 +215,8 @@ class MainActivity : AppCompatActivity() {
             articlePreviews.add(articlePrev)
         }
     }
+
+
 
 
 }
