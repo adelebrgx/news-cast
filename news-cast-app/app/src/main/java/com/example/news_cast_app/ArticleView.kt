@@ -18,13 +18,15 @@ class ArticleView : AppCompatActivity() {
         setContentView(R.layout.activity_article_view)
 
         var source=intent.getStringExtra("source")
+        var name=intent.getStringExtra("name")
         val buttonBack=findViewById(R.id.buttonBack) as Button
         buttonBack.setOnClickListener{
 
             val newIntent = Intent(this, MainActivity::class.java)
-            Log.d("retour", "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+source)
-            newIntent.putExtra("url","https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+source)
-
+            Log.d("retour", "https://newsapi.org/v2/everything?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr&sources="+source)
+            newIntent.putExtra("url","https://newsapi.org/v2/everything?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr&sources="+source)
+            newIntent.putExtra("source",source)
+            newIntent.putExtra("name",name)
             startActivity(newIntent)
         }
 
@@ -69,6 +71,8 @@ class ArticleView : AppCompatActivity() {
 
             val intent = Intent(this, WebviewArticle::class.java)
             intent.putExtra("url",url.toString())
+            intent.putExtra("source", source)
+            intent.putExtra("name", name)
             startActivity(intent)
         }
 

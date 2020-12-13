@@ -49,6 +49,7 @@
             android:paddingLeft="15dp"
             android:text="Date"
             android:textColor="#373636"
+            android:textSize="10sp"
             android:textStyle="italic" />
 
         <ImageView
@@ -57,14 +58,15 @@
             android:layout_height="61dp"
             android:paddingLeft="50dp"
             android:paddingRight="50dp"
+            android:paddingBottom="10dp"
             tools:srcCompat="@tools:sample/avatars" />
 
         <Button
             android:id="@+id/button"
-            android:layout_width="325dp"
+            android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
             android:fontFamily="sans-serif-smallcaps"
             android:insetLeft="200dp"
             android:insetTop="0dp"

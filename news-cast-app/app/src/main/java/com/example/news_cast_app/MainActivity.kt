@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var mySpinner: Spinner
     lateinit var spinArrayAdapter: SpinnerAdapter
     var sourceActual="google-news-fr"
+    var displayed="Google News (France)"
 
 
 
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         val spinner=findViewById(R.id.mySpinner) as Spinner
 
 
-        val urlSources= "https://newsapi.org/v2/sources?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr"
+        val urlSources= "https://newsapi.org/v2/sources?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr"
 
         val jsonObjectRequestSources=object: JsonObjectRequest(Request.Method.GET, urlSources, null,
             {response ->
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 val spinadapter:ArrayAdapter<String> = object: ArrayAdapter<String>(
                         context,
                         android.R.layout.simple_spinner_dropdown_item,
-                        listOf("",
+                        listOf(displayed,
                                 sources[0].name,
                                 sources[1].name,
                                 sources[2].name,
@@ -80,8 +81,9 @@ class MainActivity : AppCompatActivity() {
 
                         // set selected item style
                         if (position == spinner.selectedItemPosition){
-                            view.background = ColorDrawable(Color.parseColor("#FAEBD7"))
-                            view.setTextColor(Color.parseColor("#008000"))
+                            view.background = ColorDrawable(Color.parseColor("#F3C6D5"))
+                            view.setTextColor(Color.parseColor("#E91E63"))
+                            view.setTypeface(null, Typeface.ITALIC);
                         }
                         return view
                     }
@@ -94,11 +96,11 @@ class MainActivity : AppCompatActivity() {
                             position: Int,
                             id: Long
                     ) {
-                        Log.d("url", "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+sources[position].id)
-                        intent.putExtra("url","https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+sources[position].id )
-                        intent.putExtra("source",sources[position].id )
-                        Log.d("url","chosen")
+
                         if (position!=0){
+                            intent.putExtra("url","https://newsapi.org/v2/everything?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr&sources="+sources[position-1].id )
+                            intent.putExtra("source",sources[position-1].id )
+                            intent.putExtra("name",sources[position-1].name )
                             finish()
                             startActivity(intent)
                         }
@@ -145,15 +147,22 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        var urlArticles="https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources=google-news-fr"
+        var urlArticles="https://newsapi.org/v2/everything?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr&sources=google-news-fr"
         Log.d("url", getIntent().getStringExtra("url").toString())
         if(getIntent().getStringExtra("url").toString()=="null"){
             Log.d("url", "activité principale")
+
         }
         else{
             Log.d("url", "dropdown source choisie")
             urlArticles=getIntent().getStringExtra("url").toString()
+            Log.d("sources", intent.getStringExtra("source").toString())
+
             sourceActual=getIntent().getStringExtra("source").toString()
+            displayed=getIntent().getStringExtra("name").toString()
+
+
+
         }
 
 
@@ -214,7 +223,7 @@ class MainActivity : AppCompatActivity() {
     fun formatJSONToArticles(responseArray: JSONArray) {
         for (i in 0 until responseArray.length()){
             val JSONarticle = responseArray.getJSONObject(i)
-            val articlePrev= ArticlePreview( JSONarticle.get("author").toString(),JSONarticle.get("title").toString(), JSONarticle.get("publishedAt").toString(), JSONarticle.get("url").toString(), JSONarticle.get("urlToImage").toString(), JSONarticle.get("description").toString(),sourceActual)
+            val articlePrev= ArticlePreview( JSONarticle.get("author").toString(),JSONarticle.get("title").toString(), JSONarticle.get("publishedAt").toString(), JSONarticle.get("url").toString(), JSONarticle.get("urlToImage").toString(), JSONarticle.get("description").toString(),sourceActual, displayed)
             articlePreviews.add(articlePrev)
         }
     }

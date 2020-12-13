@@ -8,10 +8,11 @@ class ArticlePreview{
     var image= ""
     var description=""
     var source=""
+    var name=""
 
     constructor(){}
 
-    constructor(author: String, title: String, date: String, url: String, image: String, description:String, source:String){
+    constructor(author: String, title: String, date: String, url: String, image: String, description:String, source:String, name:String){
         this.author=author
         this.title=title
         this.date=date
@@ -19,6 +20,7 @@ class ArticlePreview{
         this.image=image
         this.description=description
         this.source=source
+        this.name=name
     }
 
 
