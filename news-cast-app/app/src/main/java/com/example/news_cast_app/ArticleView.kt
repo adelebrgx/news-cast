@@ -17,11 +17,15 @@ class ArticleView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article_view)
 
+        var source=intent.getStringExtra("source")
         val buttonBack=findViewById(R.id.buttonBack) as Button
         buttonBack.setOnClickListener{
 
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            val newIntent = Intent(this, MainActivity::class.java)
+            Log.d("retour", "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+source)
+            newIntent.putExtra("url","https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+source)
+
+            startActivity(newIntent)
         }
 
         val textTitle: TextView = findViewById(R.id.title_view) as TextView

@@ -69,8 +69,10 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
            }
         holder.txtTitle.text=dataset[position].title
         holder.txtDate.text=dataset[position].date
+        Log.d("source",dataset[position].source)
+        var source=dataset[position].source
         holder.button.setOnClickListener{
-            val article= ArticlePreview(dataset[position].author, dataset[position].title, dataset[position].date, dataset[position].url, dataset[position].image,dataset[position].description)
+            val article= ArticlePreview(dataset[position].author, dataset[position].title, dataset[position].date, dataset[position].url, dataset[position].image,dataset[position].description, dataset[position].source)
 
             val intent = Intent(context, ArticleView::class.java)
             intent.putExtra("author",article.author)
@@ -80,6 +82,7 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
 
             intent.putExtra("image",article.image)
             intent.putExtra("description",article.description)
+            intent.putExtra("source", source)
 
             context.startActivity(intent)
         }

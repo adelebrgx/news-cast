@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
     var sources=ArrayList<Source>()
     lateinit var mySpinner: Spinner
     lateinit var spinArrayAdapter: SpinnerAdapter
-  
+    var sourceActual="google-news-fr"
+
 
 
 
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         Log.d("url", "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+sources[position].id)
                         intent.putExtra("url","https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources="+sources[position].id )
+                        intent.putExtra("source",sources[position].id )
                         Log.d("url","chosen")
                         if (position!=0){
                             finish()
@@ -151,6 +153,7 @@ class MainActivity : AppCompatActivity() {
         else{
             Log.d("url", "dropdown source choisie")
             urlArticles=getIntent().getStringExtra("url").toString()
+            sourceActual=getIntent().getStringExtra("source").toString()
         }
 
 
@@ -211,7 +214,7 @@ class MainActivity : AppCompatActivity() {
     fun formatJSONToArticles(responseArray: JSONArray) {
         for (i in 0 until responseArray.length()){
             val JSONarticle = responseArray.getJSONObject(i)
-            val articlePrev= ArticlePreview( JSONarticle.get("author").toString(),JSONarticle.get("title").toString(), JSONarticle.get("publishedAt").toString(), JSONarticle.get("url").toString(), JSONarticle.get("urlToImage").toString(), JSONarticle.get("description").toString())
+            val articlePrev= ArticlePreview( JSONarticle.get("author").toString(),JSONarticle.get("title").toString(), JSONarticle.get("publishedAt").toString(), JSONarticle.get("url").toString(), JSONarticle.get("urlToImage").toString(), JSONarticle.get("description").toString(),sourceActual)
             articlePreviews.add(articlePrev)
         }
     }
