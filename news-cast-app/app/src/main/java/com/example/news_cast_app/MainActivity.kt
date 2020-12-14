@@ -21,21 +21,26 @@ import org.json.JSONArray
 
 class MainActivity : AppCompatActivity() {
 
+    /* List of article previews which will be displayed in the main activity */
     var articlePreviews = ArrayList<ArticlePreview>()
+
+    /* Sources retrieved from the api call */
     var sources=ArrayList<Source>()
+
+    /* Future dropdown */
     lateinit var mySpinner: Spinner
     lateinit var spinArrayAdapter: SpinnerAdapter
+
+    /* Source being displayed */
     var sourceActual="google-news-fr"
     var displayed="Google News (France)"
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val context = this
 
+        /* Creating a popup for loading and handling retry */
         val alert = AlertDialog.Builder(this).create()
         alert.setMessage("The articles are charging ... \n Please wait!")
         alert.show()
@@ -46,15 +51,16 @@ class MainActivity : AppCompatActivity() {
         val spinner=findViewById(R.id.mySpinner) as Spinner
 
 
+        /* First request to fetch news sources */
         val urlSources= "https://newsapi.org/v2/sources?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr"
 
         val jsonObjectRequestSources=object: JsonObjectRequest(Request.Method.GET, urlSources, null,
             {response ->
 
-
+                /* Formatting the sources to be displayed in dropdown */
                 val sourcesJSON=response.getJSONArray("sources")
-                Log.d("hey", response.getJSONArray("sources").toString())
                 var list = formatJSONToSources(sourcesJSON)
+                /* Creating a dropdown menu to offer the opportunity to choose another source */
                 val spinadapter:ArrayAdapter<String> = object: ArrayAdapter<String>(
                         context,
                         android.R.layout.simple_spinner_dropdown_item,
@@ -76,10 +82,8 @@ class MainActivity : AppCompatActivity() {
                                 convertView,
                                 parent
                         ) as TextView
-                        // set item text bold
-                        view.setTypeface(view.typeface, Typeface.BOLD)
 
-                        // set selected item style
+                        view.setTypeface(view.typeface, Typeface.BOLD)
                         if (position == spinner.selectedItemPosition){
                             view.background = ColorDrawable(Color.parseColor("#F3C6D5"))
                             view.setTextColor(Color.parseColor("#E91E63"))
@@ -96,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                             position: Int,
                             id: Long
                     ) {
-
+                        /* Changing source except for the first element which indicates the current source */
                         if (position!=0){
                             intent.putExtra("url","https://newsapi.org/v2/everything?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr&sources="+sources[position-1].id )
                             intent.putExtra("source",sources[position-1].id )
@@ -104,32 +108,32 @@ class MainActivity : AppCompatActivity() {
                             finish()
                             startActivity(intent)
                         }
-
-
                     }
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
                 }
+                /* dismissing the loading bar */
                 alert.dismiss()
 
             },
             { error ->
-
                 alert.dismiss()
+
+                /* Handling errors when fetching */
                 val dialogBuilder = AlertDialog.Builder(this)
 
                 dialogBuilder.setMessage("Data couldn't be fetched. Do you want to refresh ?")
                         .setCancelable(false)
+                        /* Handling retry to try fetching the data again */
                         .setPositiveButton("Retry", DialogInterface.OnClickListener {
                             dialog, id -> run {
-                            Log.d("debug","retry")
+                            /* Recreating the activity to try fetching the data again */
                             this.recreate();
                         }
                         })
                         .setNegativeButton("Cancel", DialogInterface.OnClickListener {
                             dialog, id -> dialog.cancel()
                         })
-
                 val alertError = dialogBuilder.create()
                 alertError.setTitle("An error has occurred")
                 alertError.show()
@@ -145,57 +149,42 @@ class MainActivity : AppCompatActivity() {
         }
         queue.add(jsonObjectRequestSources)
 
+        /* Making a request to display articles according to source */
 
-
+        /*When the app is instantiating */
         var urlArticles="https://newsapi.org/v2/everything?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr&sources=google-news-fr"
-        Log.d("url", getIntent().getStringExtra("url").toString())
         if(getIntent().getStringExtra("url").toString()=="null"){
             Log.d("url", "activité principale")
-
         }
+        /* When a dropdown source has been chosen */
         else{
-            Log.d("url", "dropdown source choisie")
             urlArticles=getIntent().getStringExtra("url").toString()
-            Log.d("sources", intent.getStringExtra("source").toString())
-
             sourceActual=getIntent().getStringExtra("source").toString()
             displayed=getIntent().getStringExtra("name").toString()
-
-
-
         }
-
-
 
         val jsonObjectRequestArticles = object: JsonObjectRequest(Request.Method.GET, urlArticles, null,
             {response ->
-                //textView.text="Response: %s".format(response.toString())
+
                 val articlesJSON=response.getJSONArray("articles")
+
+                /* Formatting the data to adequate format */
                 formatJSONToArticles(articlesJSON)
-                //textView.text="Response: %s".format(articlePreviews[5].author)
+
                 var viewManager = LinearLayoutManager(this)
                 var viewAdapter=CustomAdapter(articlePreviews)
 
+                /* Displaying in a recycler view */
                 var recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view).apply {
-                    // use this setting to improve performance if you know that changes
-                    // in content do not change the layout size of the RecyclerView
                     setHasFixedSize(true)
-
-                    // use a linear layout manager
                     layoutManager = viewManager
-
-                    // specify an viewAdapter (see also next example)
                     adapter = viewAdapter
-
                 }
-
-
             },
             { error ->
                 Log.d("error", error.message.toString())
             }
         )
-
         {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
@@ -203,23 +192,20 @@ class MainActivity : AppCompatActivity() {
                 return headers
             }
         }
-
         queue.add(jsonObjectRequestArticles)
-
-
-
-
 
     }
 
+    /* Function to format JSON data ro sources format */
     fun formatJSONToSources(responseArray: JSONArray){
         for (i in 0 until responseArray.length()){
             val JSONsource = responseArray.getJSONObject(i)
-            Log.d("hey", JSONsource.toString())
             val source= Source( JSONsource.get("id").toString(),JSONsource.get("name").toString())
             sources.add(source)
         }
         }
+
+    /* Function to format JSON data to article format */
     fun formatJSONToArticles(responseArray: JSONArray) {
         for (i in 0 until responseArray.length()){
             val JSONarticle = responseArray.getJSONObject(i)
@@ -227,6 +213,8 @@ class MainActivity : AppCompatActivity() {
             articlePreviews.add(articlePrev)
         }
     }
+
+
 
 
 

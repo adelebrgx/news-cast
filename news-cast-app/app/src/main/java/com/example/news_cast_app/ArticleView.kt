@@ -10,7 +10,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
-
+/* Activity to display article details */
 class ArticleView : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,11 +19,10 @@ class ArticleView : AppCompatActivity() {
 
         var source=intent.getStringExtra("source")
         var name=intent.getStringExtra("name")
+        /* Button to go back to list */
         val buttonBack=findViewById(R.id.buttonBack) as Button
         buttonBack.setOnClickListener{
-
             val newIntent = Intent(this, MainActivity::class.java)
-            Log.d("retour", "https://newsapi.org/v2/everything?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr&sources="+source)
             newIntent.putExtra("url","https://newsapi.org/v2/everything?apiKey=86e41137f6db4ed2a15179544239ee12&language=fr&sources="+source)
             newIntent.putExtra("source",source)
             newIntent.putExtra("name",name)
@@ -42,39 +41,25 @@ class ArticleView : AppCompatActivity() {
         val textDescription: TextView = findViewById(R.id.description_view) as TextView
         textDescription.text=intent.getStringExtra("description")
 
+        /* Displaying image if there's one or displaying a placeholder chosen on the web*/
         val url=intent.getStringExtra("url")
         val myImageView= findViewById<ImageView>(R.id.image)
         val urlstatic="https://cdn3.iconfinder.com/data/icons/design-n-code/100/272127c4-8d19-4bd3-bd22-2b75ce94ccb4-512.png"
-
         Picasso.get().load(urlstatic).into(myImageView)
 
-
-
-        if (intent.getStringExtra("image")=="null"){
-            Log.d("hey", "je suis passé ici")
-
-        }
-        else {
-            Log.d("hey", "je suis passé là")
+        if (intent.getStringExtra("image")!="null"){
             val urlImage=intent.getStringExtra("image").toString()
             Picasso.get().load(urlImage).into(myImageView)
         }
 
-
-
-
-
-
-
+        /* Button to read article in a webView */
         val buttonSee=findViewById(R.id.buttonRead) as Button
         buttonSee.setOnClickListener{
-
             val intent = Intent(this, WebviewArticle::class.java)
             intent.putExtra("url",url.toString())
             intent.putExtra("source", source)
             intent.putExtra("name", name)
             startActivity(intent)
         }
-
     }
 }

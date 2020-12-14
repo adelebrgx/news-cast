@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
+/* Adapter to display article in Recycler View */
 class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
 
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
@@ -24,6 +25,7 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
         val txtAuthor: TextView
         val txtTitle: TextView
         val txtDate: TextView
+        /* Button to see details*/
         val button: Button
         val image: ImageView
 
@@ -63,6 +65,7 @@ class CustomAdapter(private val dataset: ArrayList<ArticlePreview>):
             val urlImage=dataset[position].image
             Picasso.get().load(urlImage).into(holder.image)
         }
+        /* Creating a conditionnal layout 1/2 */
         holder.image.visibility=View.INVISIBLE
         if(position%2 ==0){Log.d("debug", position.toString())
                 holder.image.visibility=View.VISIBLE

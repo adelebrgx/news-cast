@@ -1,5 +1,5 @@
 package com.example.news_cast_app
-
+/* Class to model article previews */
 class ArticlePreview{
     var author: String = ""
     var title: String = ""
